@@ -1,6 +1,7 @@
 #include "ofxKinect.h"
 #include "ofUtils.h"
 #include "ofMath.h"
+#include "freenect_internal.h"
 
 // pointer to this class for static callback member functions
 ofxKinect* thisKinect = NULL;
@@ -410,6 +411,7 @@ bool ofxKinect::isDepthNearValueWhite(){
 
 //---------------------------------------------------------------------------
 void ofxKinect::grabDepthFrame(freenect_device *dev, void *depth, uint32_t timestamp) {
+	ofxKinect* thisKinect = (ofxKinect*) dev->user_data;
 	if (thisKinect->lock()) {
 		try {
 			memcpy(thisKinect->depthPixelsBack, depth, width*height*sizeof(uint16_t));
@@ -426,6 +428,7 @@ void ofxKinect::grabDepthFrame(freenect_device *dev, void *depth, uint32_t times
 
 //---------------------------------------------------------------------------
 void ofxKinect::grabRgbFrame(freenect_device *dev, freenect_pixel *rgb, uint32_t timestamp) {
+    ofxKinect* thisKinect = (ofxKinect*) dev->user_data;
 	if (thisKinect->lock()) {
 		try {
 			memcpy(thisKinect->rgbPixelsBack, rgb, FREENECT_RGB_SIZE);
@@ -454,11 +457,11 @@ void ofxKinect::threadedFunction(){
 		return;
 	}
 	
-	if (freenect_open_device(kinectContext, &kinectDevice, 0) < 0) {
+	if (freenect_open_device(kinectContext, &kinectDevice, kindex) < 0) {
 		ofLog(OF_LOG_ERROR, "ofxKinect: Could not open device");
 		return;
 	}
-	
+	kinectDevice->user_data = this;
 	freenect_set_led(kinectDevice, LED_GREEN);
 	freenect_set_depth_callback(kinectDevice, &grabDepthFrame);
 	freenect_set_rgb_callback(kinectDevice, &grabRgbFrame);

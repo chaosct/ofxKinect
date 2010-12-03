@@ -4,9 +4,14 @@
 //--------------------------------------------------------------
 void testApp::setup()
 {
+    kinect.kindex=0;
 	kinect.init();
 	kinect.setVerbose(true);
 	kinect.open();
+	kinect2.kindex = 1;
+    kinect2.init();
+	kinect2.setVerbose(true);
+	kinect2.open();
 
 	colorImg.allocate(kinect.width, kinect.height);
 	grayImage.allocate(kinect.width, kinect.height);
@@ -25,6 +30,7 @@ void testApp::update()
 {
 	ofBackground(100, 100, 100);
 	kinect.update();
+	kinect2.update();
 
 	grayImage.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
 		
@@ -67,9 +73,11 @@ void testApp::draw()
 
 	kinect.drawDepth(10, 10, 400, 300);
 	kinect.draw(420, 10, 400, 300);
+	kinect2.drawDepth(10, 310, 400, 300);
+	kinect2.draw(420, 410, 400, 300);
 	
-	grayImage.draw(10, 320, 400, 300);
-	contourFinder.draw(10, 320, 400, 300);
+	//grayImage.draw(10, 320, 400, 300);
+	//contourFinder.draw(10, 320, 400, 300);
 	
 	// point cloud is commented out because we need a proper camera class to explore it effectively
 	/*

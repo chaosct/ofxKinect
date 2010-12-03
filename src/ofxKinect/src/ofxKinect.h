@@ -14,6 +14,8 @@
 class ofxKinect : public ofBaseVideo, protected ofxThread{
 
 	public :
+	
+	int kindex;
 
 		ofxKinect();
 		virtual ~ofxKinect();
@@ -138,5 +140,6 @@ class ofxKinect : public ofBaseVideo, protected ofxThread{
     
 		// thread function
 		void threadedFunction();
+		
 };
 

@@ -26,6 +26,7 @@ class testApp : public ofBaseApp
 		void windowResized(int w, int h);
 
 		ofxKinect kinect;
+		ofxKinect kinect2;
 
 		ofxCvColorImage		colorImg;
 
